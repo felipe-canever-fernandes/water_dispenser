@@ -1,14 +1,16 @@
 module water_dispenser
 (
-	x,
-	y,
-	
-	z
+	clock,
+	counter
 );
-	input x;
-	input y;
-
-	output z;
-
-	or(z, x, y);
+		input wire clock;
+		output integer counter;
+		
+		initial begin
+			counter = 0;
+		end
+		
+		always @(posedge clock) begin
+			counter = counter + 1;
+		end
 endmodule
