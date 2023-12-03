@@ -27,9 +27,12 @@ module water_dispenser
 		input wire button_add;
 		input wire button_ok;
 		input wire button_cancel;
+		
+		// Saidas
 
 		// A quantidade de agua em mL inserida
 		output integer total_amount;
+		
 		
 		integer i;
 		reg has_added_digit;
