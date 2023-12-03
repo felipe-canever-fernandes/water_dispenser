@@ -12,7 +12,7 @@ module water_dispenser_testbench;
 	reg button_ok;
 	reg button_cancel;
   
-  wire integer total_time;
+  wire integer total_amount;
   
   water_dispenser dispenser
   (
@@ -26,6 +26,7 @@ module water_dispenser_testbench;
 	  .button_cancel(button_cancel),
 	
 	  .total_time(total_time)
+	  .total_amount(total_amount)
   );
   
   initial begin

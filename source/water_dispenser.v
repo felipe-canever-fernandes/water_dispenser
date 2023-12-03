@@ -9,7 +9,7 @@ module water_dispenser
 	button_ok,
 	button_cancel,
 	
-	total_time
+	total_amount
 );
 		// Constantes
 		
@@ -28,8 +28,8 @@ module water_dispenser
 		input wire button_ok;
 		input wire button_cancel;
 
-		// A quantidade de tempo inserida
-		output integer total_time;
+		// A quantidade de água em mL inserida
+		output integer total_amount;
 		
 		integer i;
 		reg has_added_digit;
@@ -37,14 +37,14 @@ module water_dispenser
 		
 		
 		initial begin
-			total_time = 0;
+			total_amount = 0;
 			added_digit_count = 0;
 		end
 		
 		
 		always @(posedge clock or posedge reset) begin
 			if (reset == 1) begin
-				total_time = 0;
+				total_amount = 0;
 				added_digit_count = 0;
 			end
 			else begin
@@ -57,7 +57,7 @@ module water_dispenser
 						// Se o interruptor estiver acionado...
 						if (!has_added_digit && switches[i] == 1) begin
 							// Adicionar o dígito correspondente ao total.
-							total_time = total_time * 10 + i;
+							total_amount = total_amount * 10 + i;
 							
 							// Ignorar os interruptores mais significativos que este.
 							has_added_digit = 1;
