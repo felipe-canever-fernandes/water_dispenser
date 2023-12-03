@@ -11,20 +11,24 @@ module water_dispenser
 	
 	total_time
 );
+		// Constantes
+		
 		parameter SWITCH_COUNT = 10;
 		parameter MAXIMUM_DIGIT_COUNT = 4;
 		
+		// Entradas
 
 		input wire clock;
 		input wire reset;
 		
+		// Dígitos de 0 a 9
 		input wire [SWITCH_COUNT - 1 : 0] switches;
 		
 		input wire button_add;
 		input wire button_ok;
 		input wire button_cancel;
 
-		
+		// A quantidade de tempo inserida
 		output integer total_time;
 		
 		integer i;
@@ -57,6 +61,7 @@ module water_dispenser
 							
 							// Ignorar os interruptores mais significativos que este.
 							has_added_digit = 1;
+							// Registrar que mais um dígito foi inserido.
 							added_digit_count = added_digit_count + 1;
 						end
 					end
