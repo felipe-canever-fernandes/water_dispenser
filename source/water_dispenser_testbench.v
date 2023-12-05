@@ -1,7 +1,7 @@
 `timescale 10ns/1ns
 
 module water_dispenser_testbench;
-  parameter SWITCH_COUNT = 10;
+  localparam SWITCH_COUNT = 10;
   
   reg clock;
 	reg reset;
