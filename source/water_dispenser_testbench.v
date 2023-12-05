@@ -98,5 +98,75 @@ module water_dispenser_testbench;
     
     switches[5] = 0;
     button_add = 1;
+    
+    #9;
+    
+    button_cancel = 1;
+    #9;
+    button_cancel = 0;
+    
+    #15;
+    
+    
+    // 1
+    switches[1] = 1;
+    button_add = 0;
+    
+    #10;
+    
+    switches[1] = 0;
+    button_add = 1;
+    
+    #5;
+    
+    // 9
+    switches[9] = 1;
+    button_add = 0;
+    
+    #9;
+    
+    switches[9] = 0;
+    button_add = 1;
+    
+    #6;
+    
+    // 9
+    switches[9] = 1;
+    button_add = 0;
+    
+    #7;
+    
+    switches[9] = 0;
+    button_add = 1;
+    
+    #8;
+  
+    
+    button_cancel = 1;
+    #11;
+    button_cancel = 0;
+    
+    #7;
+    
+    
+    // 3
+    switches[3] = 1;
+    button_add = 0;
+    
+    #15;
+    
+    switches[3] = 0;
+    button_add = 1;
+    
+    #5;
+    
+    //
+    switches[5] = 1;
+    button_add = 0;
+    
+    #12;
+    
+    switches[5] = 0;
+    button_add = 1;
   end
 endmodule

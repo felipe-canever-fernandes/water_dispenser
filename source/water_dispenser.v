@@ -42,9 +42,22 @@ module water_dispenser
 		button btn_add
 		(
 			.clock(clock),
+			.reset(reset),
+			
 			.button_value(button_add),
 			
 			.negative_edge_detected(button_add_was_pressed)
+		);
+		
+		wire button_cancel_was_pressed;
+		button btn_cancel
+		(
+			.clock(clock),
+			.reset(reset),
+			
+			.button_value(button_cancel),
+			
+			.negative_edge_detected(button_cancel_was_pressed)
 		);
 		
 		
@@ -60,8 +73,12 @@ module water_dispenser
 				added_digit_count <= 0;
 			end
 			else begin
+				if (button_cancel_was_pressed) begin
+					total_amount <= 0;
+					added_digit_count <= 0;
+				end
 				// Se o botão for pressionado e houver espaco no visor...
-				if (button_add_was_pressed && added_digit_count < MAXIMUM_DIGIT_COUNT) begin
+				else if (button_add_was_pressed && added_digit_count < MAXIMUM_DIGIT_COUNT) begin
 					has_added_digit = 0;
 				
 					// Passar por todos os interruptores.
