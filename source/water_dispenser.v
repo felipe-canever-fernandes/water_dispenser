@@ -38,6 +38,15 @@ module water_dispenser
 		reg has_added_digit;
 		integer added_digit_count;
 		
+		wire button_add_was_pressed;
+		button btn_add
+		(
+			.clock(clock),
+			.button_value(button_add),
+			
+			.negative_edge_detected(button_add_was_pressed)
+		);
+		
 		
 		initial begin
 			total_amount <= 0;
@@ -51,8 +60,8 @@ module water_dispenser
 				added_digit_count <= 0;
 			end
 			else begin
-				// Se houver espaco no visor...
-				if (added_digit_count < MAXIMUM_DIGIT_COUNT) begin
+				// Se o botão for pressionado e houver espaco no visor...
+				if (button_add_was_pressed && added_digit_count < MAXIMUM_DIGIT_COUNT) begin
 					has_added_digit = 0;
 				
 					// Passar por todos os interruptores.
