@@ -13,8 +13,8 @@ module water_dispenser
 );
 		// Constantes
 		
-		parameter SWITCH_COUNT = 10;
-		parameter MAXIMUM_DIGIT_COUNT = 4;
+		localparam SWITCH_COUNT = 10;
+		localparam MAXIMUM_DIGIT_COUNT = 4;
 		
 		// Entradas
 
