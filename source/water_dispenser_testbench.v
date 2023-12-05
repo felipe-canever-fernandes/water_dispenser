@@ -35,8 +35,8 @@ module water_dispenser_testbench;
 	  switches = 0;
 	
 	  button_add = 1;
-	  button_ok = 0;
-	  button_cancel = 0;
+	  button_ok = 1;
+	  button_cancel = 1;
   end
   
   always #1 begin
@@ -148,6 +148,12 @@ module water_dispenser_testbench;
     
     #7;
     
+    button_ok = 0;
+    #8;
+    button_ok = 1;
+    
+    #7
+    
     
     // 3
     switches[3] = 1;
@@ -167,6 +173,35 @@ module water_dispenser_testbench;
     #12;
     
     switches[5] = 0;
+    button_add = 1;
+    
+    
+    #10;
+    
+    button_ok = 0;
+    #8;
+    button_ok = 1;
+    
+    #8;
+    
+    // 1
+    switches[1] = 1;
+    button_add = 0;
+    
+    #10;
+    
+    switches[1] = 0;
+    button_add = 1;
+    
+    #5;
+    
+    // 9
+    switches[9] = 1;
+    button_add = 0;
+    
+    #9;
+    
+    switches[9] = 0;
     button_add = 1;
   end
 endmodule

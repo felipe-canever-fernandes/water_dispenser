@@ -60,8 +60,26 @@ module water_dispenser
 			.negative_edge_detected(button_cancel_was_pressed)
 		);
 		
+		wire button_ok_was_pressed;
+		button btn_ok
+		(
+			.clock(clock),
+			.reset(reset),
+			
+			.button_value(button_ok),
+			
+			.negative_edge_detected(button_ok_was_pressed)
+		);
+		
+		localparam READING_INPUT = 1'b0;
+		localparam DISPENSING = 1'b1;
+		
+		reg current_state;
+		
 		
 		initial begin
+			current_state <= READING_INPUT;
+		
 			total_amount <= 0;
 			added_digit_count <= 0;
 		end
@@ -69,32 +87,40 @@ module water_dispenser
 		
 		always @(posedge clock or posedge reset) begin
 			if (reset == 1) begin
+				current_state <= READING_INPUT;
+			
 				total_amount <= 0;
 				added_digit_count <= 0;
 			end
 			else begin
-				if (button_cancel_was_pressed) begin
-					total_amount <= 0;
-					added_digit_count <= 0;
-				end
-				// Se o botão for pressionado e houver espaco no visor...
-				else if (button_add_was_pressed && added_digit_count < MAXIMUM_DIGIT_COUNT) begin
-					has_added_digit = 0;
-				
-					// Passar por todos os interruptores.
-					for (i = 0; i < SWITCH_COUNT; i = i + 1) begin
-						// Se o interruptor estiver acionado...
-						if (!has_added_digit && switches[i] == 1) begin
-							// Adicionar o di­gito correspondente ao total.
-							total_amount <= total_amount * 10 + i;
-							
-							// Ignorar os interruptores mais significativos que este.
-							has_added_digit = 1;
-							// Registrar que mais um di­gito foi inserido.
-							added_digit_count <= added_digit_count + 1;
+				case (current_state)
+					READING_INPUT:
+						if (button_cancel_was_pressed) begin
+							total_amount <= 0;
+							added_digit_count <= 0;
 						end
-					end
-				end
+						else if (button_ok_was_pressed && total_amount > 0) begin
+							current_state <= DISPENSING;
+						end
+						// Se o botão for pressionado e houver espaco no visor...
+						else if (button_add_was_pressed && added_digit_count < MAXIMUM_DIGIT_COUNT) begin
+							has_added_digit = 0;
+						
+							// Passar por todos os interruptores.
+							for (i = 0; i < SWITCH_COUNT; i = i + 1) begin
+								// Se o interruptor estiver acionado...
+								if (!has_added_digit && switches[i] == 1) begin
+									// Adicionar o di­gito correspondente ao total.
+									total_amount <= total_amount * 10 + i;
+									
+									// Ignorar os interruptores mais significativos que este.
+									has_added_digit = 1;
+									// Registrar que mais um di­gito foi inserido.
+									added_digit_count <= added_digit_count + 1;
+								end
+							end
+						end
+				endcase
 			end
 		end
 endmodule
