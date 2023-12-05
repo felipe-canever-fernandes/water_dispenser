@@ -25,7 +25,6 @@ module water_dispenser_testbench;
 	  .button_ok(button_ok),
 	  .button_cancel(button_cancel),
 	
-	  .total_time(total_time)
 	  .total_amount(total_amount)
   );
   
@@ -51,7 +50,7 @@ module water_dispenser_testbench;
     switches[1] = 1;
     button_add = 1;
     
-    #1;
+    #5;
     
     switches[1] = 0;
     button_add = 0;
@@ -62,7 +61,7 @@ module water_dispenser_testbench;
     switches[9] = 1;
     button_add = 1;
     
-    #1;
+    #3;
     
     switches[9] = 0;
     button_add = 0;
@@ -73,7 +72,7 @@ module water_dispenser_testbench;
     switches[9] = 1;
     button_add = 1;
     
-    #1;
+    #3;
     
     switches[9] = 0;
     button_add = 0;

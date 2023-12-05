@@ -40,15 +40,15 @@ module water_dispenser
 		
 		
 		initial begin
-			total_amount = 0;
-			added_digit_count = 0;
+			total_amount <= 0;
+			added_digit_count <= 0;
 		end
 		
 		
 		always @(posedge clock or posedge reset) begin
 			if (reset == 1) begin
-				total_amount = 0;
-				added_digit_count = 0;
+				total_amount <= 0;
+				added_digit_count <= 0;
 			end
 			else begin
 				// Se houver espaco no visor...
@@ -60,12 +60,12 @@ module water_dispenser
 						// Se o interruptor estiver acionado...
 						if (!has_added_digit && switches[i] == 1) begin
 							// Adicionar o di­gito correspondente ao total.
-							total_amount = total_amount * 10 + i;
+							total_amount <= total_amount * 10 + i;
 							
 							// Ignorar os interruptores mais significativos que este.
 							has_added_digit = 1;
 							// Registrar que mais um di­gito foi inserido.
-							added_digit_count = added_digit_count + 1;
+							added_digit_count <= added_digit_count + 1;
 						end
 					end
 				end
