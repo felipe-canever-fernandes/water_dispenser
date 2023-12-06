@@ -236,5 +236,80 @@ module water_dispenser_testbench;
     #5;
     button_cancel = 1;
     
+    // Despejar 1380 ml
+    
+    // 1
+    #15;
+    switches[1] = 1;
+    #14;
+    button_add = 0;
+    #9;
+    button_add = 1;
+    #8;
+    switches[1] = 0;
+    
+    // 3
+    #5;
+    switches[3] = 1;
+    #14;
+    button_add = 0;
+    #9;
+    button_add = 1;
+    #8;
+    switches[3] = 0;
+    
+    // 8
+    #10;
+    switches[8] = 1;
+    #6;
+    button_add = 0;
+    #12;
+    button_add = 1;
+    #10;
+    switches[8] = 0;
+    
+    // 0
+    #10;
+    switches[0] = 1;
+    #6;
+    button_add = 0;
+    #12;
+    button_add = 1;
+    #10;
+    switches[0] = 0;
+    
+    // OK
+    #15;
+    button_ok = 0;
+    #13;
+    button_ok = 1;
+    
+    // Pressionar outros botoes nao deve interromper o processo
+    
+     // 8
+    #10;
+    switches[8] = 1;
+    #6;
+    button_add = 0;
+    #12;
+    button_add = 1;
+    #10;
+    switches[8] = 0;
+    
+    // 0
+    #10;
+    switches[0] = 1;
+    #6;
+    button_add = 0;
+    #12;
+    button_add = 1;
+    #10;
+    switches[0] = 0;
+    
+    // OK
+    #15;
+    button_ok = 0;
+    #13;
+    button_ok = 1;
   end
 endmodule

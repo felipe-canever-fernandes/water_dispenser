@@ -130,6 +130,8 @@ module water_dispenser
 						
 							if (button_cancel_was_pressed || count >= total_amount_in_ml * NS_PER_ML / CLOCK_PERIOD_IN_NS) begin
 								total_amount_in_ml <= 0;
+								added_digit_count <= 0;
+								
 								current_state <= READING_INPUT;
 							end
 						end
