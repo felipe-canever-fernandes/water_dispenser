@@ -1,5 +1,5 @@
 module water_dispenser
-#(parameter NS_PER_ML = 100)
+#(parameter NS_PER_ML = 1000000)
 (
 	clock,
 	reset,
