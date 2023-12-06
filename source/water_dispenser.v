@@ -10,7 +10,6 @@ module water_dispenser
 	button_ok,
 	button_cancel,
 	
-	current_state,
 	total_amount_in_ml,
 	
 	display0,
@@ -18,6 +17,7 @@ module water_dispenser
 	display2,
 	display3,
 	
+	led,
 	relay
 );
 		localparam CLOCK_PERIOD_IN_NS = 20;
@@ -36,7 +36,6 @@ module water_dispenser
 		input wire button_ok;
 		input wire button_cancel;
 		
-		output reg current_state;
 		output integer total_amount_in_ml;
 		
 		output [7:0] display0;
@@ -44,6 +43,7 @@ module water_dispenser
 		output [7:0] display2;
 		output [7:0] display3;
 		
+		output reg led;
 		output reg relay;
 		
 		
@@ -134,6 +134,9 @@ module water_dispenser
 		localparam READING_INPUT = 1'b0;
 		localparam DISPENSING = 1'b1;
 		
+		reg current_state;
+		
+		
 		always @(posedge clock or posedge reset) begin	
 			if (reset == 1) begin
 				current_state <= READING_INPUT;
@@ -194,5 +197,8 @@ module water_dispenser
 			value0 = (total_amount_in_ml - value3 * 1000 - value2 * 100 - value1 * 10);
 		end
 		
-		always @(current_state) relay <= !current_state;
+		always @(current_state) begin
+			led <= current_state;
+			relay <= !current_state;
+		end
 endmodule
