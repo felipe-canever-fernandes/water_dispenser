@@ -1,5 +1,5 @@
 module water_dispenser
-#(parameter NS_PER_ML = 1000000)
+#(parameter NS_PER_ML = 64'd1000000)
 (
 	clock,
 	reset,
@@ -11,7 +11,12 @@ module water_dispenser
 	button_cancel,
 	
 	current_state,
-	total_amount_in_ml
+	total_amount_in_ml,
+	
+	display0,
+	display1,
+	display2,
+	display3
 );
 		localparam CLOCK_PERIOD_IN_NS = 20;
 		
@@ -19,8 +24,6 @@ module water_dispenser
 		localparam MAXIMUM_DIGIT_COUNT = 4;
 		
 		localparam MAXIMUM_VOLUME_IN_ML = 9999;
-		
-		localparam COUNTER_BIT_COUNT = $clog2(MAXIMUM_VOLUME_IN_ML);
 
 		input wire clock;
 		input wire reset;
@@ -77,10 +80,10 @@ module water_dispenser
 		
 		reg should_reset_counter;
 		reg is_timer_enabled;
-		wire [COUNTER_BIT_COUNT - 1 : 0] count;
+		wire [64 - 1 : 0] count;
 		
 		counter
-		#(.BIT_COUNT(COUNTER_BIT_COUNT))
+		#(.BIT_COUNT(64))
 		timer
 		(
 			.clock(clock),
@@ -90,10 +93,46 @@ module water_dispenser
 			.count(count)
 		);
 		
+		reg [15:0] value0;
+		output [7:0] display0;
+		
+		reg [15:0] value1;
+		output [7:0] display1;
+		
+		reg [15:0] value2;
+		output [7:0] display2;
+		
+		reg [15:0] value3;
+		output [7:0] display3;
+		
+		seven_segment_display ssd0
+		(
+			.value(value0),
+			.display(display0)
+		);
+		
+		seven_segment_display ssd1
+		(
+			.value(value1),
+			.display(display1)
+		);
+		
+		seven_segment_display ssd2
+		(
+			.value(value2),
+			.display(display2)
+		);
+		
+		seven_segment_display ssd3
+		(
+			.value(value3),
+			.display(display3)
+		);
+		
 		localparam READING_INPUT = 1'b0;
 		localparam DISPENSING = 1'b1;
 		
-		always @(posedge clock or posedge reset) begin
+		always @(posedge clock or posedge reset) begin	
 			if (reset == 1) begin
 				current_state <= READING_INPUT;
 				
@@ -144,5 +183,12 @@ module water_dispenser
 						end
 				endcase
 			end
+		end
+		
+		always @(total_amount_in_ml) begin
+			value3 = total_amount_in_ml / 1000;
+			value2 = (total_amount_in_ml - value3 * 1000) / 100;
+			value1 = (total_amount_in_ml - value3 * 1000 - value2 * 100) / 10;
+			value0 = (total_amount_in_ml - value3 * 1000 - value2 * 100 - value1 * 10);
 		end
 endmodule
