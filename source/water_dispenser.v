@@ -1,4 +1,5 @@
 module water_dispenser
+#(parameter NS_PER_ML = 100)
 (
 	clock,
 	reset,
@@ -9,7 +10,7 @@ module water_dispenser
 	button_ok,
 	button_cancel,
 	
-	total_amount
+	total_amount_in_ml
 );
 		// Constantes
 		
@@ -21,8 +22,6 @@ module water_dispenser
 		localparam MAXIMUM_VOLUME_IN_ML = 9999;
 		
 		localparam COUNTER_BIT_COUNT = $clog2(MAXIMUM_VOLUME_IN_ML);
-		
-		localparam TIMER_TIME_IN_NS = 160;
 		
 		// Entradas
 
@@ -39,7 +38,7 @@ module water_dispenser
 		// Saidas
 
 		// A quantidade de agua em mL inserida
-		output integer total_amount;
+		output integer total_amount_in_ml;
 		
 		
 		integer i;
@@ -98,29 +97,21 @@ module water_dispenser
 		reg current_state;
 		
 		
-		initial begin
-			current_state <= READING_INPUT;
-		
-			total_amount <= 0;
-			added_digit_count <= 0;
-		end
-		
-		
 		always @(posedge clock or posedge reset) begin
 			if (reset == 1) begin
 				current_state <= READING_INPUT;
 			
-				total_amount <= 0;
+				total_amount_in_ml <= 0;
 				added_digit_count <= 0;
 			end
 			else begin
 				case (current_state)
 					READING_INPUT:
 						if (button_cancel_was_pressed) begin
-							total_amount <= 0;
+							total_amount_in_ml <= 0;
 							added_digit_count <= 0;
 						end
-						else if (button_ok_was_pressed && total_amount > 0) begin
+						else if (button_ok_was_pressed && total_amount_in_ml > 0) begin
 							current_state <= DISPENSING;
 							should_reset_counter = 1;
 						end
@@ -133,12 +124,15 @@ module water_dispenser
 								// Se o interruptor estiver acionado...
 								if (!has_added_digit && switches[i] == 1) begin
 									// Adicionar o di­gito correspondente ao total.
-									total_amount <= total_amount * 10 + i;
+									total_amount_in_ml <= total_amount_in_ml * 10 + i;
 									
 									// Ignorar os interruptores mais significativos que este.
 									has_added_digit = 1;
-									// Registrar que mais um di­gito foi inserido.
-									added_digit_count <= added_digit_count + 1;
+									
+									if (total_amount_in_ml != 0) begin
+										// Registrar que mais um di­gito foi inserido.
+										added_digit_count <= added_digit_count + 1;
+									end
 								end
 							end
 						end
@@ -146,8 +140,8 @@ module water_dispenser
 						begin
 							should_reset_counter = 0;
 						
-							if (count >= TIMER_TIME_IN_NS / CLOCK_PERIOD_IN_NS) begin
-								total_amount <= 0;
+							if (count >= total_amount_in_ml * NS_PER_ML / CLOCK_PERIOD_IN_NS) begin
+								total_amount_in_ml <= 0;
 								current_state <= READING_INPUT;
 							end
 						end
