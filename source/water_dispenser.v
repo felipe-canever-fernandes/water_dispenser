@@ -12,8 +12,6 @@ module water_dispenser
 	
 	total_amount_in_ml
 );
-		// Constantes
-		
 		localparam CLOCK_PERIOD_IN_NS = 20;
 		
 		localparam SWITCH_COUNT = 10;
@@ -22,22 +20,16 @@ module water_dispenser
 		localparam MAXIMUM_VOLUME_IN_ML = 9999;
 		
 		localparam COUNTER_BIT_COUNT = $clog2(MAXIMUM_VOLUME_IN_ML);
-		
-		// Entradas
 
 		input wire clock;
 		input wire reset;
 		
-		// Di­gitos de 0 a 9
 		input wire [SWITCH_COUNT - 1 : 0] switches;
 		
 		input wire button_add;
 		input wire button_ok;
 		input wire button_cancel;
 		
-		// Saidas
-
-		// A quantidade de agua em mL inserida
 		output integer total_amount_in_ml;
 		
 		
@@ -46,6 +38,7 @@ module water_dispenser
 		integer added_digit_count;
 		
 		wire button_add_was_pressed;
+		
 		button btn_add
 		(
 			.clock(clock),
@@ -57,6 +50,7 @@ module water_dispenser
 		);
 		
 		wire button_cancel_was_pressed;
+		
 		button btn_cancel
 		(
 			.clock(clock),
@@ -68,6 +62,7 @@ module water_dispenser
 		);
 		
 		wire button_ok_was_pressed;
+		
 		button btn_ok
 		(
 			.clock(clock),
@@ -96,7 +91,6 @@ module water_dispenser
 		
 		reg current_state;
 		
-		
 		always @(posedge clock or posedge reset) begin
 			if (reset == 1) begin
 				current_state <= READING_INPUT;
@@ -115,22 +109,16 @@ module water_dispenser
 							current_state <= DISPENSING;
 							should_reset_counter = 1;
 						end
-						// Se o botão for pressionado e houver espaco no visor...
 						else if (button_add_was_pressed && added_digit_count < MAXIMUM_DIGIT_COUNT) begin
 							has_added_digit = 0;
 						
-							// Passar por todos os interruptores.
 							for (i = 0; i < SWITCH_COUNT; i = i + 1) begin
-								// Se o interruptor estiver acionado...
 								if (!has_added_digit && switches[i] == 1) begin
-									// Adicionar o di­gito correspondente ao total.
 									total_amount_in_ml <= total_amount_in_ml * 10 + i;
 									
-									// Ignorar os interruptores mais significativos que este.
 									has_added_digit = 1;
 									
 									if (total_amount_in_ml != 0) begin
-										// Registrar que mais um di­gito foi inserido.
 										added_digit_count <= added_digit_count + 1;
 									end
 								end
