@@ -13,8 +13,16 @@ module water_dispenser
 );
 		// Constantes
 		
+		localparam CLOCK_PERIOD_IN_NS = 20;
+		
 		localparam SWITCH_COUNT = 10;
 		localparam MAXIMUM_DIGIT_COUNT = 4;
+		
+		localparam MAXIMUM_VOLUME_IN_ML = 9999;
+		
+		localparam COUNTER_BIT_COUNT = $clog2(MAXIMUM_VOLUME_IN_ML);
+		
+		localparam TIMER_TIME_IN_NS = 160;
 		
 		// Entradas
 
@@ -71,6 +79,19 @@ module water_dispenser
 			.negative_edge_detected(button_ok_was_pressed)
 		);
 		
+		wire [COUNTER_BIT_COUNT - 1 : 0] count;
+		reg should_reset_counter;
+		
+		counter
+		#(.BIT_COUNT(COUNTER_BIT_COUNT))
+		timer
+		(
+			.clock(clock),
+			.reset(should_reset_counter),
+			
+			.count(count)
+		);
+		
 		localparam READING_INPUT = 1'b0;
 		localparam DISPENSING = 1'b1;
 		
@@ -101,6 +122,7 @@ module water_dispenser
 						end
 						else if (button_ok_was_pressed && total_amount > 0) begin
 							current_state <= DISPENSING;
+							should_reset_counter = 1;
 						end
 						// Se o botão for pressionado e houver espaco no visor...
 						else if (button_add_was_pressed && added_digit_count < MAXIMUM_DIGIT_COUNT) begin
@@ -118,6 +140,15 @@ module water_dispenser
 									// Registrar que mais um di­gito foi inserido.
 									added_digit_count <= added_digit_count + 1;
 								end
+							end
+						end
+					DISPENSING:
+						begin
+							should_reset_counter = 0;
+						
+							if (count >= TIMER_TIME_IN_NS / CLOCK_PERIOD_IN_NS) begin
+								total_amount <= 0;
+								current_state <= READING_INPUT;
 							end
 						end
 				endcase

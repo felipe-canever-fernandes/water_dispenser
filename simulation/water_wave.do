@@ -10,8 +10,8 @@ add wave -noupdate /water_dispenser_testbench/total_amount
 add wave -noupdate /water_dispenser_testbench/dispenser/current_state
 add wave -noupdate -radix unsigned /water_dispenser_testbench/dispenser/count
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {2610 ns} 0} {{Cursor 2} {2410 ns} 0}
-quietly wave cursor active 0
+WaveRestoreCursors {{Cursor 1} {4731 ns} 0}
+quietly wave cursor active 1
 configure wave -namecolwidth 275
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -26,4 +26,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {2316 ns} {2840 ns}
+WaveRestoreZoom {0 ns} {5250 ns}
