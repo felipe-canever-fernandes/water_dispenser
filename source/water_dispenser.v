@@ -10,6 +10,7 @@ module water_dispenser
 	button_ok,
 	button_cancel,
 	
+	current_state,
 	total_amount_in_ml
 );
 		localparam CLOCK_PERIOD_IN_NS = 20;
@@ -30,6 +31,7 @@ module water_dispenser
 		input wire button_ok;
 		input wire button_cancel;
 		
+		output reg current_state;
 		output integer total_amount_in_ml;
 		
 		
@@ -90,8 +92,6 @@ module water_dispenser
 		
 		localparam READING_INPUT = 1'b0;
 		localparam DISPENSING = 1'b1;
-		
-		reg current_state;
 		
 		always @(posedge clock or posedge reset) begin
 			if (reset == 1) begin

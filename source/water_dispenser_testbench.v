@@ -12,6 +12,7 @@ module water_dispenser_testbench;
 	reg button_ok;
 	reg button_cancel;
   
+  wire current_state;
   wire integer total_amount_in_ml;
   
   water_dispenser
@@ -27,6 +28,7 @@ module water_dispenser_testbench;
 	  .button_ok(button_ok),
 	  .button_cancel(button_cancel),
 	
+	   .current_state(current_state),
 	  .total_amount_in_ml(total_amount_in_ml)
   );
   
@@ -122,8 +124,10 @@ module water_dispenser_testbench;
     // Se mais de um digito estiver pressionado,
     // inserir o menor
     
-   // 8, (3), 6
-   #5;
+   
+// 8, (3), 6
+   
+#5;
     switches[8] = 1;
     #5;
     switches[3] = 1;
@@ -140,8 +144,10 @@ module water_dispenser_testbench;
     #5;
     switches[6] = 0;
     
-   // 9, 5, (0)
-   #5;
+   
+// 9, 5, (0)
+   
+#5;
     switches[9] = 1;
     #5;
     switches[5] = 1;
