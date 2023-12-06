@@ -128,7 +128,7 @@ module water_dispenser
 						begin
 							should_reset_counter = 0;
 						
-							if (count >= total_amount_in_ml * NS_PER_ML / CLOCK_PERIOD_IN_NS) begin
+							if (button_cancel_was_pressed || count >= total_amount_in_ml * NS_PER_ML / CLOCK_PERIOD_IN_NS) begin
 								total_amount_in_ml <= 0;
 								current_state <= READING_INPUT;
 							end
