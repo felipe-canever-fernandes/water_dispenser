@@ -73,8 +73,9 @@ module water_dispenser
 			.negative_edge_detected(button_ok_was_pressed)
 		);
 		
-		wire [COUNTER_BIT_COUNT - 1 : 0] count;
 		reg should_reset_counter;
+		reg is_timer_enabled;
+		wire [COUNTER_BIT_COUNT - 1 : 0] count;
 		
 		counter
 		#(.BIT_COUNT(COUNTER_BIT_COUNT))
@@ -82,6 +83,7 @@ module water_dispenser
 		(
 			.clock(clock),
 			.reset(should_reset_counter),
+			.is_enabled(is_timer_enabled),
 			
 			.count(count)
 		);
@@ -94,6 +96,8 @@ module water_dispenser
 		always @(posedge clock or posedge reset) begin
 			if (reset == 1) begin
 				current_state <= READING_INPUT;
+				
+				is_timer_enabled <= 0;
 			
 				total_amount_in_ml <= 0;
 				added_digit_count <= 0;
@@ -127,10 +131,13 @@ module water_dispenser
 					DISPENSING:
 						begin
 							should_reset_counter = 0;
+							is_timer_enabled <= 1;
 						
 							if (button_cancel_was_pressed || count >= total_amount_in_ml * NS_PER_ML / CLOCK_PERIOD_IN_NS) begin
 								total_amount_in_ml <= 0;
 								added_digit_count <= 0;
+								
+								is_timer_enabled <= 0;
 								
 								current_state <= READING_INPUT;
 							end

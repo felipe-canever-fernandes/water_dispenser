@@ -10,6 +10,7 @@ module counter_testbench;
   
   reg clock;
   reg reset;
+  reg is_enabled;
   
   wire [BIT_COUNT - 1 : 0] count;
   
@@ -28,6 +29,7 @@ module counter_testbench;
   initial begin
     clock = 0;
     reset = 0;
+    is_enabled = 1;
   end
   
   always #1 begin
