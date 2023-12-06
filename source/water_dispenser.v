@@ -16,7 +16,9 @@ module water_dispenser
 	display0,
 	display1,
 	display2,
-	display3
+	display3,
+	
+	relay
 );
 		localparam CLOCK_PERIOD_IN_NS = 20;
 		
@@ -36,6 +38,13 @@ module water_dispenser
 		
 		output reg current_state;
 		output integer total_amount_in_ml;
+		
+		output [7:0] display0;
+		output [7:0] display1;
+		output [7:0] display2;
+		output [7:0] display3;
+		
+		output reg relay;
 		
 		
 		integer i;
@@ -94,16 +103,9 @@ module water_dispenser
 		);
 		
 		reg [15:0] value0;
-		output [7:0] display0;
-		
 		reg [15:0] value1;
-		output [7:0] display1;
-		
 		reg [15:0] value2;
-		output [7:0] display2;
-		
 		reg [15:0] value3;
-		output [7:0] display3;
 		
 		seven_segment_display ssd0
 		(
@@ -191,4 +193,6 @@ module water_dispenser
 			value1 = (total_amount_in_ml - value3 * 1000 - value2 * 100) / 10;
 			value0 = (total_amount_in_ml - value3 * 1000 - value2 * 100 - value1 * 10);
 		end
+		
+		always @(current_state) relay <= !current_state;
 endmodule
